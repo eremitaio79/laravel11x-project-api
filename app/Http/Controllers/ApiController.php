@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
@@ -12,7 +13,16 @@ class ApiController extends Controller
     public function status()
     {
         // return response()->json(['status' => 'OK']);
-        return "Status OK dentro do método status.\nQuebra de linha no retorno de status.";
+        // return "<pre>Status OK dentro do método status.
+        //         \nQuebra de linha no retorno de status.</pre>";
+
+        // Resposta do método em formato JSON.
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Status OK dentro do método status.',
+        ],
+        200,
+        ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -20,63 +30,54 @@ class ApiController extends Controller
      */
     public function clients()
     {
-        // return response()->json(['clients' => []]);
-        return "Todos os clientes cadastrados. Retorno do método clients.\nRetorno de clients.";
+        // $clients = Client::all(); // Retorna todos os clientes cadastrados.
+        $clients = Client::paginate(20); // Retorna de 20 em 20 clientes cadastrados.
+
+        return response()->json([
+            'clients' => $clients,
+            'message' => 'Clientes retornados com sucesso.',
+        ],
+        200,
+        ['Content-Type' => 'application/json']);
     }
 
     /**
-     * Display a listing of the resource.
+     * Retorna as informações de um cliente específico.
      */
-    public function index()
+    public function clientById($id)
     {
-        //
+        $client = Client::find($id);
+
+        if ($client) {
+            return response()->json([
+                'client' => $client,
+                'message' => 'Cliente retornado com sucesso.',
+            ],
+            200,
+            ['Content-Type' => 'application/json']);
+        }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Retorna um cliente específico via post.
      */
-    public function create()
+    public function client(Request $request)
     {
-        //
-    }
+        $client = Client::find($request->id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if ($client) {
+            return response()->json([
+                'client' => $client,
+                'message' => 'Cliente retornado com sucesso.',
+            ],
+            200,
+            ['Content-Type' => 'application/json']);
+        } else {
+            return response()->json([
+                'message' => 'Cliente não encontrado.',
+            ],
+            404,
+            ['Content-Type' => 'application/json']);
+        }
     }
 }
