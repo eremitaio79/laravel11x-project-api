@@ -12,7 +12,7 @@ class ApiController extends Controller
     public function status()
     {
         // return response()->json(['status' => 'OK']);
-        return "Status OK dentro do método status.";
+        return "Status OK dentro do método status.\nQuebra de linha no retorno de status.";
     }
 
     /**
@@ -21,7 +21,7 @@ class ApiController extends Controller
     public function clients()
     {
         // return response()->json(['clients' => []]);
-        return "Todos os clientes cadastrados. Retorno do método clients.";
+        return "Todos os clientes cadastrados. Retorno do método clients.\nRetorno de clients.";
     }
 
     /**
